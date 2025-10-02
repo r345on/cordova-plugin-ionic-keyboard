@@ -62,6 +62,22 @@ NSString* UITraitsClassString;
 
 - (void)pluginInitialize
 {
+    // Skip on macOS: either Catalyst or iOS app running on Mac (Apple Silicon)
+    if (@available(iOS 14.0, *)) {
+        if (NSProcessInfo.processInfo.isMacCatalystApp ||
+            NSProcessInfo.processInfo.isiOSAppOnMac ||
+            UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomMac) {
+            NSLog(@"CDVIonicKeyboard: Skipping initialization on macOS (Catalyst or iOS-on-Mac).");
+            return;
+        }
+    } else {
+        // Older SDKs don’t expose isiOSAppOnMac; Catalyst still covered by the macro below.
+        #if TARGET_OS_MACCATALYST
+        NSLog(@"CDVIonicKeyboard: Skipping initialization on macOS Catalyst.");
+        return;
+        #endif
+    }
+
     UIClassString = [@[@"UI", @"Web", @"Browser", @"View"] componentsJoinedByString:@""];
     WKClassString = [@[@"WK", @"Content", @"View"] componentsJoinedByString:@""];
     UITraitsClassString = [@[@"UI", @"Text", @"Input", @"Traits"] componentsJoinedByString:@""];
