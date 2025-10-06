@@ -213,6 +213,10 @@ NSString* UITraitsClassString;
 
 - (void)setKeyboardHeight:(int)height delay:(NSTimeInterval)delay
 {
+    if (@available(iOS 14.0, *)) {
+            if ([NSProcessInfo processInfo].isiOSAppOnMac) { return; }
+    }
+
     if (self.keyboardResizes != ResizeNone) {
         [self setPaddingBottom: height delay:delay];
     }
@@ -220,6 +224,10 @@ NSString* UITraitsClassString;
 
 - (void)setPaddingBottom:(int)paddingBottom delay:(NSTimeInterval)delay
 {
+    if (@available(iOS 14.0, *)) {
+            if ([NSProcessInfo processInfo].isiOSAppOnMac) { return; }
+    }
+
     if (self.paddingBottom == paddingBottom) {
         return;
     }
