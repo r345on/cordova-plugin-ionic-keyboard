@@ -139,6 +139,10 @@ NSString* UITraitsClassString;
 
 -(void)statusBarDidChangeFrame:(NSNotification*)notification
 {
+    if (@available(iOS 14.0, *)) {
+        if ([NSProcessInfo processInfo].isiOSAppOnMac) { return; }
+    }
+
     [self _updateFrame];
 }
 
@@ -186,6 +190,10 @@ NSString* UITraitsClassString;
 
 - (void)onKeyboardDidShow:(NSNotification *)note
 {
+    if (@available(iOS 14.0, *)) {
+        if ([NSProcessInfo processInfo].isiOSAppOnMac) { return; }
+    }
+
     CGRect rect = [[note.userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     double height = rect.size.height;
 
